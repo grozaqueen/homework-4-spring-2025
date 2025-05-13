@@ -24,7 +24,7 @@ class BasePage(object):
 
     def _get_static_filepath(self, filename):
         return path.abspath(
-            path.join(path.curdir, 'hw', 'static', filename)
+            path.join(path.curdir, 'hw', 'media', filename)
         )
 
     def is_opened(self, timeout=100):
@@ -110,8 +110,23 @@ class BasePage(object):
         except TimeoutException:
             return False
 
-    def send_keys_to_input(self, locator, keys, timeout):
-        inp = self.find(locator=locator, timeout=timeout)
-        self.click(locator=locator, timeout=timeout)
-        inp.clear()
-        inp.send_keys(keys)
+    def send_keys_to_input(self, locator, keys, timeout=None, clear_first=True):
+        if timeout is None:
+            timeout = self.timeout
+
+        # Находим элемент. find() теперь должен ждать видимости.
+        # Можно также использовать element_to_be_clickable, если нужно, чтобы поле было активно.
+        # inp = self.wait(timeout).until(EC.element_to_be_clickable(locator))
+        inp = self.find(locator=locator, timeout=timeout)  # self.find уже ждет EC.visibility_of_element_located
+
+        # Опционально: можно добавить попытку JS клика для фокуса, если send_keys не срабатывает
+        # try:
+        #     self.driver.execute_script("arguments[0].focus();", inp)
+        # except Exception as e:
+        #     print(f"Could not focus element {locator} via JS: {e}")
+
+        if clear_first:
+            inp.clear()  # Очищаем поле перед вводом
+
+        inp.send_keys(keys)  # Отправляем текст
+        print(f"Sent keys '{keys}' to element {locator}")

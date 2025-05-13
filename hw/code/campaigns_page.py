@@ -4,7 +4,7 @@ from base_page import BasePage, DEFAULT_TIMEOUT
 from campaigns_locators import CampaignPageLocators
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-
+from os import path
 from datetime import date
 
 
@@ -97,7 +97,7 @@ class CampaignsPage(BasePage):
         self.click(locator=self.locators.AD_SHORT_DESCRIPTION, timeout=timeout)
         ActionChains(self.driver).send_keys(Keys.BACKSPACE * 200 + description + Keys.ENTER).perform()
 
-    def load_media(self, filename='image.png', timeout=DEFAULT_TIMEOUT):
+    def load_media(self, filename='img.png', timeout=DEFAULT_TIMEOUT):
         filepath = self._get_static_filepath(filename=filename)
         self.find(locator=self.locators.ADD_MEDIA_FILE_INPUT, timeout=timeout).send_keys(filepath)
         WebDriverWait(self.driver, 50).until(
@@ -263,4 +263,37 @@ class CampaignsPage(BasePage):
 
     def assert_ad_visible(self, name, timeout=DEFAULT_TIMEOUT):
         self.click(locator=self.locators.ADS_MENU_ITEM, timeout=timeout)
-        assert self.became_visible(locator=self.locators.get_ad_name_locator(name=name), timeout=timeout)   
+        assert self.became_visible(locator=self.locators.get_ad_name_locator(name=name), timeout=timeout)
+
+    def load_logo(self, filename='img.png', timeout=DEFAULT_TIMEOUT):
+        """Загружает логотип компании."""
+        filepath = self._get_static_filepath(filename=filename)
+
+        print(f"Attempting to upload logo from: {filepath}")
+        if not path.exists(filepath):
+            print(f"ERROR: Logo file does not exist at path: {filepath}")
+            raise FileNotFoundError(f"Logo file not found at: {filepath}")
+
+        # Шаг 1: Кликнуть на кнопку "Выбрать логотип", чтобы открыть модальное окно/секцию загрузки
+        print("Clicking 'Select Logo' button...")
+        self.click(self.locators.SELECT_LOGO_BUTTON, timeout=timeout)
+
+        # Шаг 2: Найти элемент <input type="file"> в модальном окне и отправить ему путь к файлу
+        print(f"Sending filepath '{filepath}' to logo file input...")
+        logo_input_element = self.wait(timeout).until(
+            EC.presence_of_element_located(self.locators.LOGO_FILE_INPUT_IN_MODAL)
+        )
+        logo_input_element.send_keys(filepath)
+
+        # Шаг 3: Дождаться появления превью загруженного логотипа в модальном окне/загрузчике
+        print("Waiting for logo preview (in uploader) to appear...")
+        WebDriverWait(self.driver, 50).until(
+            EC.visibility_of_element_located(self.locators.LOADED_LOGO_PREVIEW)
+        )
+        print("Logo preview in uploader is visible.")
+
+        # Шаг 4: Нажать кнопку "Добавить" для подтверждения выбора логотипа из модального окна
+        # Это предполагаемый шаг, если модальное окно требует подтверждения.
+        print("Clicking 'Add' button to confirm logo selection from modal...")
+        self.click(self.locators.ADD_BUTTON, timeout=timeout)  # Используем существующий локатор ADD_BUTTON
+        print("Logo added from modal.")

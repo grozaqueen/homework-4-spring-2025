@@ -13,7 +13,7 @@ class CampaignPageLocators(BasePageLocators):
     EDITABLE_AD_HEADER = (By.XPATH, '//div[starts-with(@class, "EditableTitle") and *[contains(text(), "Объявление")]]')
     SITE_OPTION = (By.XPATH, '//div[@data-id="site_conversions"]')
     GROUP_OPTION = (By.XPATH, '//div[@data-id="social"]')
-    ADVERTISED_SITE_FIELD = (By.XPATH, '//input[@placeholder="Введите ссылку на сайт"]')
+    ADVERTISED_SITE_FIELD = (By.XPATH, '//input[@placeholder="Вставьте ссылку или выберите из списка"]')
     BUDGET = (By.XPATH, '//*[@data-testid="targeting-not-set"]')
     START_DATE = (By.XPATH, '//*[@data-testid="start-date"]')
     END_DATE = (By.XPATH, '//*[@data-testid="end-date"]')
@@ -43,6 +43,11 @@ class CampaignPageLocators(BasePageLocators):
     ADD_GROUP_BUTTON = (By.XPATH, '//*[text()="Добавить"]')
     CONFIRM_CAMPAIGN = (By.XPATH, '//span[text()="Отправить"]')
     SHOT_IN_VIDEO = (By.XPATH, '//span[text()="Ролик в видео"]')
+
+    SELECT_LOGO_BUTTON = (By.XPATH, '//span[contains(text(), "Выбрать логотип")]')
+    LOGO_FILE_INPUT_IN_MODAL = (By.XPATH, '//div[contains(@class, "MediaLibrary_container")]//input[@type="file"]')
+
+    LOADED_LOGO_PREVIEW = (By.XPATH, '//div[contains(@class, "UploadMediaButton_image")]//img')
 
     ACTIONS_ICON = (By.XPATH, '//*[@data-testid="actions"]')
     DELETE_BUTTON = (By.XPATH, '//*[contains(text(), "Удалить")]')
