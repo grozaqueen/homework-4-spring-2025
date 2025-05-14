@@ -176,6 +176,7 @@ class CampaignsPage(BasePage):
         self.wait_until_ad_logo_loaded()
         self.load_media()
         self.click_publish()
+
         self.close_err()
         self.click_publish()
         self.close_err()
@@ -196,9 +197,11 @@ class CampaignsPage(BasePage):
         self.click_shot_in_video()
         self.load_media()
         self.enter_ad_name(name=ad_name)
-        self.close_err()
         self.click_publish()
-        self.click_confirm()
+        self.close_err()
+
+        self.click_publish()
+
 
     def search_for_campaign(self, name, timeout=DEFAULT_TIMEOUT):
         self.send_keys_to_input(locator=self.locators.SEARCH_INPUT, keys=name + Keys.ENTER, timeout=timeout)

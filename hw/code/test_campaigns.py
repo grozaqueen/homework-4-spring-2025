@@ -15,8 +15,19 @@ class TestCampaigns(BaseCase):
     _valid_description = 'description'
     _valid_header2 = 'заголовок'
     _valid_description2 = 'описание'
-    _valid_group_tag = 'svoya__kultura'
+    _valid_group_tag = 'VK'
     _valid_folder_name = 'folder1'
+
+    def test_create_campaign_group(self, campaigns_page):
+        campaigns_page.create_campaign_group(
+            name=self._valid_name,
+            group_name=self._valid_group_name,
+            ad_name=self._valid_ad_name,
+            group_tag=self._valid_group_tag,
+            description=self._valid_description,
+        )
+        campaigns_page.assert_campaign_visible(self._valid_name)
+        campaigns_page.delete_campaign(name=self._valid_name)
 
     def test_create_campaign_site(self, campaigns_page):
         campaigns_page.create_campaign_site(
@@ -31,16 +42,7 @@ class TestCampaigns(BaseCase):
         campaigns_page.assert_campaign_visible(self._valid_name)
         campaigns_page.delete_campaign(name=self._valid_name)
 
-    def test_create_campaign_group(self, campaigns_page):
-        campaigns_page.create_campaign_group(
-            name=self._valid_name,
-            group_name=self._valid_group_name,
-            ad_name=self._valid_ad_name,
-            group_tag=self._valid_group_tag,
-            description=self._valid_description,
-        )
-        campaigns_page.assert_campaign_visible(self._valid_name)
-        campaigns_page.delete_campaign(name=self._valid_name)
+
 
     def test_search(self, campaigns_page):
         campaigns_page.create_campaign_site(
