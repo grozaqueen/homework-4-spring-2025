@@ -25,6 +25,11 @@ class CampaignPageLocators(BasePageLocators):
     AD_MEDIATEKA = (By.XPATH, '//span[contains(text(), "Медиатека")]')
     MEDIATEKA_FILE = (By.XPATH, '//div[starts-with(@class, "ImageItem")]')
     CLOSE_BUTTON = (By.XPATH, '//button[@aria-label="Close"]')
+
+    # CommonError_closeButton__ - tUR1
+
+    CLOSE_ERR_BUTTON = (By.XPATH, '//button[starts-with(@class, "CommonError_closeButton__-tUR1")]')
+
     ADD_BUTTON = (By.XPATH, '//span[contains(text(), "Добавить")]')
     AD_LOAD_MEDIAFILES = (By.XPATH, '//div[contains(@class, "Loading_loading")]')
     FILE_INPUT = (By.XPATH, '//input[@type="file"]')

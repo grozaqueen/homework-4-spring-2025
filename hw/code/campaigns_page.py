@@ -97,12 +97,17 @@ class CampaignsPage(BasePage):
         self.click(locator=self.locators.AD_SHORT_DESCRIPTION, timeout=timeout)
         ActionChains(self.driver).send_keys(Keys.BACKSPACE * 200 + description + Keys.ENTER).perform()
 
-    def load_media(self, filename='img.png', timeout=DEFAULT_TIMEOUT):
-        filepath = self._get_static_filepath(filename=filename)
-        self.find(locator=self.locators.ADD_MEDIA_FILE_INPUT, timeout=timeout).send_keys(filepath)
+    def load_media(self, file1='img.png', file2='img_1.png', timeout=DEFAULT_TIMEOUT):
+        filepath = self._get_static_filepath(filename=file1)
+        filepath2 = self._get_static_filepath(filename=file2)
+        file_input =self.find(locator=self.locators.ADD_MEDIA_FILE_INPUT, timeout=timeout)
+        file_input.send_keys(f"{filepath}\n{filepath2}")
         WebDriverWait(self.driver, 50).until(
             EC.invisibility_of_element_located(self.locators.MEDIA_PLACEHOLDER)
         )
+
+    def close_err(self):
+        self.click(locator=self.locators.CLOSE_ERR_BUTTON, timeout=DEFAULT_TIMEOUT)
 
     def click_publish(self, timeout=DEFAULT_TIMEOUT):
         self.click(locator=self.locators.PUBLISH_BUTTON, timeout=timeout)
@@ -171,6 +176,10 @@ class CampaignsPage(BasePage):
         self.wait_until_ad_logo_loaded()
         self.load_media()
         self.click_publish()
+        self.close_err()
+        self.click_publish()
+        self.close_err()
+        self.click_publish()
 
     def create_campaign_group(self, name, group_name, ad_name, group_tag, description):
         self.go_to_create_campaign()
@@ -187,6 +196,7 @@ class CampaignsPage(BasePage):
         self.click_shot_in_video()
         self.load_media()
         self.enter_ad_name(name=ad_name)
+        self.close_err()
         self.click_publish()
         self.click_confirm()
 
