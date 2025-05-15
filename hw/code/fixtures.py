@@ -5,7 +5,11 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 
+from campaigns_page import CampaignsPage
+from audience_page import AudiencePage
+from login_page import LoginPage
 from leadform_page import LeadFormPage
 
 BASE_URL_FOR_AUTH = "https://ads.vk.com/"
@@ -16,7 +20,9 @@ def driver():
     service = Service(executable_path=ChromeDriverManager().install())
 
     options = webdriver.ChromeOptions()
+
     driver = webdriver.Chrome(service=service, options=options)
+
     print("Запуск браузера")
 
     driver.get(BASE_URL_FOR_AUTH)
@@ -37,10 +43,14 @@ def driver():
         with open('localstorage.json', 'r') as f:
             LOCAL_STORAGE_DATA = json.load(f)
     except FileNotFoundError:
-        print("Файл cookies.json не найден.")
+        print("Файл localstorage.json не найден.")
         LOCAL_STORAGE_DATA = {}
     except json.JSONDecodeError:
-        print("Ошибка декодирования cookies.json.")
+        print("Ошибка декодирования localstorage.json.")
+        print("Файл localstorage.json не найден.")
+        LOCAL_STORAGE_DATA = {}
+    except json.JSONDecodeError:
+        print("Ошибка декодирования localstorage.json.")
         LOCAL_STORAGE_DATA = {}
 
     if COOKIES_DATA:
@@ -132,6 +142,7 @@ def get_driver(browser_name, config=None):
     if browser_name == 'chrome':
         service = Service(executable_path=ChromeDriverManager().install())
         browser = webdriver.Chrome(service=service)
+
     else:
         raise RuntimeError(f'Unsupported browser: "{browser_name}"')
     browser.maximize_window()
@@ -151,10 +162,23 @@ def all_drivers(config, request):  # config is used here
 
 
 @pytest.fixture
+
 def leadform_page(driver):
 
     driver.get(LeadFormPage.url)
     return LeadFormPage(driver=driver)
+
+def campaigns_page(driver):
+    driver.get(CampaignsPage.url)
+    return CampaignsPage(driver=driver)
+
+def audience_page(driver):
+    driver.get(AudiencePage.url)
+    return AudiencePage(driver=driver)
+
+def login_page(driver):
+    driver.get(LoginPage.url)
+    return LoginPage(driver=driver)
 
 
 class BasePage:
@@ -193,3 +217,4 @@ def base_page(driver):
 @pytest.fixture
 def main_page(driver):
     return MainPage(driver=driver)
+
