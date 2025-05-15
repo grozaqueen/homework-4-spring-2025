@@ -124,7 +124,7 @@ def driver():
 
     print("Обновление страницы для применения cookie/localStorage...")
     driver.refresh()
-
+    driver.maximize_window()
     yield driver
     print("Закрытие браузера")
     driver.quit()

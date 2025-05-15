@@ -37,7 +37,7 @@ class AudiencePage(BasePage):
         self.click(locator=self.locators.LIST_TYPE_SELECT, timeout=timeout)
         self.click(locator=self.locators.UNIFIED_LIST_OPTION, timeout=timeout)
 
-    def load_unified_list(self, filename='unified_list.csv', timeout=DEFAULT_TIMEOUT):
+    def load_unified_list(self, filename='list.csv', timeout=DEFAULT_TIMEOUT):
         filepath = self._get_static_filepath(filename=filename)
         inp = self.find(locator=self.locators.FILE_INPUT, timeout=timeout)
         inp.send_keys(filepath)
@@ -50,6 +50,7 @@ class AudiencePage(BasePage):
         assert self.became_invisible(locator=self.locators.ADD_USER_LIST_HEADER, timeout=timeout)
 
     def create_audience_from_user_list(self, name, list_name, timeout=DEFAULT_TIMEOUT):
+        print('opa')
         self.click(locator=self.locators.AUDIENCES_MENU_ITEM, timeout=timeout)
         self.click_create_audience(timeout=timeout)
         self.enter_audience_name(name=name, timeout=timeout)
@@ -58,6 +59,7 @@ class AudiencePage(BasePage):
         self.choose_load_new(timeout=timeout)
         self.enter_user_list_info(name=list_name, timeout=timeout)
         self.click_submit(timeout=timeout)
+        print('opa')
         assert self.became_invisible(locator=self.locators.ADD_AUDIENCE_HEADER, timeout=timeout)
 
     def assert_audience_visible(self, name, timeout=DEFAULT_TIMEOUT):
