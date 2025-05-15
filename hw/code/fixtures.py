@@ -10,17 +10,19 @@ from webdriver_manager.firefox import GeckoDriverManager
 from campaigns_page import CampaignsPage
 from audience_page import AudiencePage
 from login_page import LoginPage
+from leadform_page import LeadFormPage
 
 BASE_URL_FOR_AUTH = "https://ads.vk.com/"
+
 
 @pytest.fixture(scope='function')
 def driver():
     service = Service(executable_path=ChromeDriverManager().install())
 
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless') # Example
+
     driver = webdriver.Chrome(service=service, options=options)
-    driver = webdriver.Chrome(service=service)
+
     print("Запуск браузера")
 
     driver.get(BASE_URL_FOR_AUTH)
@@ -41,6 +43,10 @@ def driver():
         with open('localstorage.json', 'r') as f:
             LOCAL_STORAGE_DATA = json.load(f)
     except FileNotFoundError:
+        print("Файл localstorage.json не найден.")
+        LOCAL_STORAGE_DATA = {}
+    except json.JSONDecodeError:
+        print("Ошибка декодирования localstorage.json.")
         print("Файл localstorage.json не найден.")
         LOCAL_STORAGE_DATA = {}
     except json.JSONDecodeError:
@@ -125,6 +131,7 @@ def driver():
 
     print("Обновление страницы для применения cookie/localStorage...")
     driver.refresh()
+
     driver.maximize_window()
     yield driver
     print("Закрытие браузера")
@@ -135,9 +142,7 @@ def get_driver(browser_name, config=None):
     if browser_name == 'chrome':
         service = Service(executable_path=ChromeDriverManager().install())
         browser = webdriver.Chrome(service=service)
-    elif browser_name == 'firefox':
-        service = Service(executable_path=GeckoDriverManager().install())
-        browser = webdriver.Firefox(service=service)
+
     else:
         raise RuntimeError(f'Unsupported browser: "{browser_name}"')
     browser.maximize_window()
@@ -157,6 +162,12 @@ def all_drivers(config, request):  # config is used here
 
 
 @pytest.fixture
+
+def leadform_page(driver):
+
+    driver.get(LeadFormPage.url)
+    return LeadFormPage(driver=driver)
+
 def campaigns_page(driver):
     driver.get(CampaignsPage.url)
     return CampaignsPage(driver=driver)
@@ -206,3 +217,4 @@ def base_page(driver):
 @pytest.fixture
 def main_page(driver):
     return MainPage(driver=driver)
+
