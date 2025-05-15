@@ -7,7 +7,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from os import path
 from datetime import date
 
-
 class TargetActions():
     SITE = 'site'
     GROUP = 'group'
