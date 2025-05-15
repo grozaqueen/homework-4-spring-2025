@@ -7,6 +7,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
+from campaigns_page import CampaignsPage
 from audience_page import AudiencePage
 from login_page import LoginPage
 
@@ -156,6 +157,10 @@ def all_drivers(config, request):  # config is used here
 
 
 @pytest.fixture
+def campaigns_page(driver):
+    driver.get(CampaignsPage.url)
+    return CampaignsPage(driver=driver)
+
 def audience_page(driver):
     driver.get(AudiencePage.url)
     return AudiencePage(driver=driver)
@@ -163,7 +168,6 @@ def audience_page(driver):
 def login_page(driver):
     driver.get(LoginPage.url)
     return LoginPage(driver=driver)
-
 
 
 class BasePage:
