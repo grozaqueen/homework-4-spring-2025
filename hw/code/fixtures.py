@@ -8,9 +8,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
 from audience_page import AudiencePage
+from login_page import LoginPage
 
 BASE_URL_FOR_AUTH = "https://ads.vk.com/"
-
 
 @pytest.fixture(scope='function')
 def driver():
@@ -157,9 +157,13 @@ def all_drivers(config, request):  # config is used here
 
 @pytest.fixture
 def audience_page(driver):
-
     driver.get(AudiencePage.url)
     return AudiencePage(driver=driver)
+
+def login_page(driver):
+    driver.get(LoginPage.url)
+    return LoginPage(driver=driver)
+
 
 
 class BasePage:
