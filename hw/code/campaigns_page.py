@@ -169,17 +169,19 @@ class CampaignsPage(BasePage):
         self.enter_group_name(name=group_name)
         self.click_region()
         self.click_continue()
+        self.load_media()
+
         self.enter_ad_header(header=header)
         self.enter_short_description(description=description)
         self.enter_ad_name(name=ad_name)
         self.wait_until_ad_logo_loaded()
-        self.load_media()
         self.click_publish()
 
-        self.close_err()
-        self.click_publish()
-        self.close_err()
-        self.click_publish()
+        try:
+            self.close_err()
+            self.click_publish()
+        except:
+            print("увы")
 
     def create_campaign_group(self, name, group_name, ad_name, group_tag, description):
         self.go_to_create_campaign()
