@@ -16,7 +16,6 @@ def driver():
     service = Service(executable_path=ChromeDriverManager().install())
 
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless') # Example
     driver = webdriver.Chrome(service=service, options=options)
     print("Запуск браузера")
 

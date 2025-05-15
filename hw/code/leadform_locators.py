@@ -61,11 +61,33 @@ class LeadFormPageLocators(BasePageLocators):
         By.XPATH,
         '//textarea[@placeholder="Напишите вопрос"]'
     )
+
     ANSWER_TEXT_INPUT_1 = (
         By.XPATH,
         '(//input[@placeholder="Введите ответ"])[1]'
     )
+
     ANSWER_TEXT_INPUT_2 = (
         By.XPATH,
         '(//input[@placeholder="Введите ответ"])[2]'
+    )
+
+    ADD_CONTACT_DATA_BUTTON = (
+        By.XPATH,
+        '//button[.//span[text()="Добавить контактные данные"]]'
+    )
+
+    EMAIL_CHECKBOX_LABEL = (
+        By.XPATH,
+        '//label[contains(@class, "vkuiCheckbox") and .//span[text()="Электронная почта"]]'
+    )
+
+    CITY_CHECKBOX_LABEL = (
+        By.XPATH,
+        '//label[contains(@class, "vkuiCheckbox") and .//span[text()="Город"]]'
+    )
+
+    ADD_BUTTON_IN_MODAL = (
+        By.XPATH,
+        '//div[contains(@class, "ModalManagerPage_footer")]//button[.//span[@class="vkuiButton__content" and text()="Добавить"]]'
     )

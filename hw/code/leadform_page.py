@@ -35,7 +35,6 @@ class LeadFormPage(BasePage):
         print("Filepath sent to Mediateka input.")
 
         try:
-            print("Attempting to click Mediateka confirmation button (e.g., 'Добавить')...")
             confirm_button = self.find(self.locators.MODAL_MEDIATEKA_IMAGE, timeout=timeout_short)
             confirm_button.click()
 
@@ -97,4 +96,20 @@ class LeadFormPage(BasePage):
             raise ValueError("Wrong number")
 
         self.send_keys_to_input(locator, answer_text, timeout=timeout)
+
         print(f"Entered answer text for answer #{answer_number}: {answer_text}")
+
+    def click_add_contact_data(self, timeout=DEFAULT_TIMEOUT):
+        self.click(self.locators.ADD_CONTACT_DATA_BUTTON, timeout=timeout)
+        print('clicked ADD_CONTACT_DATA_BUTTON')
+
+    def click_email_checkbox(self, timeout=DEFAULT_TIMEOUT):
+        self.click(self.locators.EMAIL_CHECKBOX_LABEL, timeout=timeout)
+        print('clicked EMAIL_CHECKBOX')
+
+    def click_city_checkbox(self, timeout=DEFAULT_TIMEOUT):
+        self.click(self.locators.CITY_CHECKBOX_LABEL, timeout=timeout)
+        print('clicked PHONE_CHECKBOX')
+
+    def click_add_button(self, timeout=DEFAULT_TIMEOUT):
+        self.click(self.locators.ADD_BUTTON_IN_MODAL, timeout=timeout)
