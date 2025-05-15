@@ -13,8 +13,9 @@ class LeadFormPage(BasePage):
         print("Clicked 'Create Lead Form' button and modal appeared.")
 
     def enter_lead_form_internal_name(self, name, timeout=DEFAULT_TIMEOUT):
-        self.send_keys_to_input(self.locators.LEAD_FORM_INTERNAL_NAME_INPUT, name, timeout=timeout)
+        elem = self.send_keys_to_input(self.locators.LEAD_FORM_INTERNAL_NAME_INPUT, name, timeout=timeout)
         print(f"Entered internal lead form name: {name}")
+        return elem.get_attribute("value")
 
     def upload_logo(self, filename="logo.png", timeout_short=10):
 
@@ -60,20 +61,24 @@ class LeadFormPage(BasePage):
         print("Logo preview is visible on the main lead form.")
 
     def enter_company_name(self, name, timeout=DEFAULT_TIMEOUT):
-        self.send_keys_to_input(self.locators.COMPANY_NAME_INPUT, name, timeout=timeout)
+        elem = self.send_keys_to_input(self.locators.COMPANY_NAME_INPUT, name, timeout=timeout)
         print(f"Entered company name: {name}")
+        return elem.get_attribute("value")
 
     def enter_form_title(self, title, timeout=DEFAULT_TIMEOUT):
-        self.send_keys_to_input(self.locators.FORM_TITLE_INPUT, title, timeout=timeout)
+        elem = self.send_keys_to_input(self.locators.FORM_TITLE_INPUT, title, timeout=timeout)
         print(f"Entered form title: {title}")
+        return elem.get_attribute("value")
 
     def enter_form_description(self, description, timeout=DEFAULT_TIMEOUT):
-        self.send_keys_to_input(self.locators.FORM_DESCRIPTION_INPUT, description, timeout=timeout)
+        elem = self.send_keys_to_input(self.locators.FORM_DESCRIPTION_INPUT, description, timeout=timeout)
         print(f"Entered form description: {description}")
+        return elem.get_attribute("value")
 
     def click_modal_continue_button(self, timeout=DEFAULT_TIMEOUT):
-        self.click(self.locators.MODAL_CONTINUE_BUTTON, timeout=timeout)
+        elem = self.click(self.locators.MODAL_CONTINUE_BUTTON, timeout=timeout)
         print("Clicked modal 'Continue' button.")
+        return elem.get_attribute("value")
 
     def click_next_button(self, timeout=DEFAULT_TIMEOUT):
         self.click(self.locators.NEXT_BUTTON, timeout=timeout)
@@ -84,8 +89,9 @@ class LeadFormPage(BasePage):
         print("Clicked add question button.")
 
     def enter_question_text(self, question, timeout=DEFAULT_TIMEOUT):
-        self.send_keys_to_input(self.locators.QUESTION_TEXT_INPUT, question, timeout=timeout)
+        elem = self.send_keys_to_input(self.locators.QUESTION_TEXT_INPUT, question, timeout=timeout)
         print(f"Entered question text: {question}")
+        return elem.get_attribute("value")
 
     def enter_answer_text(self, answer_text, answer_number, timeout=DEFAULT_TIMEOUT):
         if answer_number == 1:
@@ -95,9 +101,11 @@ class LeadFormPage(BasePage):
         else:
             raise ValueError("Wrong number")
 
-        self.send_keys_to_input(locator, answer_text, timeout=timeout)
+        elem = self.send_keys_to_input(locator, answer_text, timeout=timeout)
 
         print(f"Entered answer text for answer #{answer_number}: {answer_text}")
+
+        return elem.get_attribute("value")
 
     def click_add_contact_data(self, timeout=DEFAULT_TIMEOUT):
         self.click(self.locators.ADD_CONTACT_DATA_BUTTON, timeout=timeout)
