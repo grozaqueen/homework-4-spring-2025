@@ -12,7 +12,7 @@ class LeadFormPage(BasePage):
         self.click(self.locators.CREATE_LEAD_FORM_BUTTON, timeout=timeout)
 
     def enter_lead_form_internal_name(self, name, timeout=DEFAULT_TIMEOUT):
-        elem = self.send_keys_to_input(self.locators.LEAD_FORM_INTERNAL_NAME_INPUT, name, timeout=timeout)
+        elem = self.send_keys_to_input(self.locators.select_by_placeholder("Название лид-формы"), name, timeout=timeout)
         return elem.get_attribute("value")
 
     def upload_logo(self, filename="logo.png", timeout_short=10):
@@ -41,15 +41,15 @@ class LeadFormPage(BasePage):
 
 
     def enter_company_name(self, name, timeout=DEFAULT_TIMEOUT):
-        elem = self.send_keys_to_input(self.locators.COMPANY_NAME_INPUT, name, timeout=timeout)
+        elem = self.send_keys_to_input(self.locators.select_by_placeholder("Название компании"), name, timeout=timeout)
         return elem.get_attribute("value")
 
     def enter_form_title(self, title, timeout=DEFAULT_TIMEOUT):
-        elem = self.send_keys_to_input(self.locators.FORM_TITLE_INPUT, title, timeout=timeout)
+        elem = self.send_keys_to_input(self.locators.select_by_placeholder("Текст заголовка"), title, timeout=timeout)
         return elem.get_attribute("value")
 
     def enter_form_description(self, description, timeout=DEFAULT_TIMEOUT):
-        elem = self.send_keys_to_input(self.locators.FORM_DESCRIPTION_INPUT, description, timeout=timeout)
+        elem = self.send_keys_to_input(self.locators.select_by_placeholder("Введите описание"), description, timeout=timeout)
         return elem.get_attribute("value")
 
     def click_modal_continue_button(self, timeout=DEFAULT_TIMEOUT):
@@ -57,10 +57,10 @@ class LeadFormPage(BasePage):
         return elem.get_attribute("value")
 
     def click_next_button(self, timeout=DEFAULT_TIMEOUT):
-        self.click(self.locators.NEXT_BUTTON, timeout=timeout)
+        self.click(self.locators.select_button_by_text("Продолжить"), timeout=timeout)
 
     def click_add_question_button(self, timeout=DEFAULT_TIMEOUT):
-        self.click(self.locators.ADD_QUESTION_BUTTON, timeout=timeout)
+        self.click(self.locators.select_button_by_text("Добавить вопрос"), timeout=timeout)
 
     def enter_question_text(self, question, timeout=DEFAULT_TIMEOUT):
         elem = self.send_keys_to_input(self.locators.QUESTION_TEXT_INPUT, question, timeout=timeout)
