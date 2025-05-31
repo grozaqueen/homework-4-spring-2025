@@ -15,7 +15,6 @@ class TestLeadForms(BaseCase):
         internal_name_text = leadform_page.enter_lead_form_internal_name(self._valid_internal_lead_form_name)
 
         leadform_page.upload_logo(filename=self._valid_logo_filename)
-        print("Лого успешно загружено")
         assert internal_name_text == self._valid_internal_lead_form_name
 
     def test_create_decoration(self, leadform_page):
