@@ -59,27 +59,22 @@ class LoginPage(BasePage):
         self.driver.get(self.url)
         self.is_opened()
 
-    def click_profile_creation(self):
-        self.find(LoginPageLocators.PROFILE_CREATION)
-        self.click(LoginPageLocators.PROFILE_CREATION)
-        welcome_words = self.find(LoginPageLocators.WELCOME_WORDS)
-        assert welcome_words.is_displayed(), "Првиетственая страница ВК рекламы не отображается"
-
-    def check_header(self):
+    def open_dropdown(self):
         self.find(LoginPageLocators.DROPDOWN_BUTTON)
-        self.click(LoginPageLocators.DROPDOWN_BUTTON)
-        self.find(LoginPageLocators.CURRENT_LK)
+        return self.click(LoginPageLocators.DROPDOWN_BUTTON)
+
+    def get_header_elements(self):
+        current_lk = self.find(LoginPageLocators.CURRENT_LK)
         id_element = self.find(LoginPageLocators.COPY_ID)
-        id_pattern = r"^ID: \d{8}$"
-        assert re.fullmatch(id_pattern, id_element.text), (
-            f"ID должен быть в формате 'ID 12345678', получено: '{id_element.text}'"
-        )
+        return current_lk, id_element
+
+    def hover_over_id_and_get_text(self, id_element):
         ActionChains(self.driver).move_to_element(id_element).pause(0.5).perform()
         text_item = self.find(LoginPageLocators.COPY_TEXT)
         WebDriverWait(self.driver, 7).until(
             lambda d: "Скопировать ID" in d.find_element(*LoginPageLocators.COPY_TEXT).text
         )
-        assert "Скопировать ID" in text_item.text, f"Текст после наведения: {text_item.text}"
+        return text_item
 
     def setup(self):
         self.click(LoginPageLocators.CREATE_NEW_BUTTON)
@@ -145,19 +140,15 @@ class LoginPage(BasePage):
 
         self.click(LoginPageLocators.MAILING_CHECKBOX_LEGAL)
 
-    def invalid_email_registration(self, emails_list):
+    def check_single_invalid_email(self, email):
         self.setup()
-
         self.click(LoginPageLocators.ADS_TYPE)
         self.click(LoginPageLocators.IND_TYPE)
-
-        for email in emails_list:
-            self.clear_email()
-            self.input_email(email)
-            self.click(LoginPageLocators.ADS_TYPE)
-            alert = self.find(LoginPageLocators.ALERT_CONTAINER)
-
-            yield alert.text
+        self.clear_email()
+        self.input_email(email)
+        self.click(LoginPageLocators.ADS_TYPE)
+        alert = self.find(LoginPageLocators.ALERT_CONTAINER)
+        return alert.text
 
     def empty_registration(self):
         self.setup()
@@ -194,8 +185,20 @@ class LoginPage(BasePage):
         ]
 
         for country_locator in rub_countries:
-            self.click(LoginPageLocators.COUNTRY_SELECT_BUTTON)
-            self.click(country_locator)
+            try:
+                self.click(LoginPageLocators.COUNTRY_SELECT_BUTTON)
+                self.click(country_locator)
 
-            self.click(LoginPageLocators.CURRENCY_SELECT_BUTTON)
-            self.find(LoginPageLocators.CURRENCY_SELECT_RUB)
+                self.click(LoginPageLocators.CURRENCY_SELECT_BUTTON)
+                currency_element = self.find(LoginPageLocators.CURRENCY_SELECT_RUB)
+
+                if not currency_element.is_displayed():
+                    raise AssertionError(f"Валюта RUB не отображается для страны {country_locator}")
+
+                if "Российский рубль(RUB)" not in currency_element.text:
+                    raise AssertionError(f"Текст валюты не содержит RUB для страны {country_locator}")
+
+            except Exception as e:
+                raise AssertionError(f"Ошибка при обработке страны {country_locator}: {str(e)}") from e
+
+        return True
