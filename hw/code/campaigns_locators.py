@@ -1,103 +1,142 @@
 from selenium.webdriver.common.by import By
 
-from base_locators import BasePageLocators
-
+class BasePageLocators:
+    pass
 
 class CampaignPageLocators(BasePageLocators):
-    DISMISS_BUTTON = (By.XPATH, '//div[@role="button" and @aria-label="Закрыть"]')
-    CREATE_CAMPAIGN_BUTTON = (By.XPATH, "//*[@data-testid='create-button']")
-    EDITABLE_HEADER = (By.XPATH, '//div[starts-with(@class, "EditableTitle")]')
-    EDITABLE_CAMPAIGN_HEADER = (
-    By.XPATH, '//div[starts-with(@class, "EditableTitle") and *[contains(text(), "Кампания")]]')
-    EDITABLE_GROUP_HEADER = (By.XPATH, '//div[starts-with(@class, "EditableTitle") and *[contains(text(), "Группа")]]')
-    EDITABLE_AD_HEADER = (By.XPATH, '//div[starts-with(@class, "EditableTitle") and *[contains(text(), "Объявление")]]')
-    SITE_OPTION = (By.XPATH, '//div[@data-id="site_conversions"]')
-    GROUP_OPTION = (By.XPATH, '//div[@data-id="social"]')
-    ADVERTISED_SITE_FIELD = (By.XPATH, '//input[@placeholder="Вставьте ссылку или выберите из списка"]')
-    BUDGET = (By.XPATH, '//*[@data-testid="targeting-not-set"]')
-    START_DATE = (By.XPATH, '//*[@data-testid="start-date"]')
-    END_DATE = (By.XPATH, '//*[@data-testid="end-date"]')
-    CONTINUE = (By.XPATH, '//span[contains(text(), "Продолжить")]')
-    REGION = (By.XPATH, '//span[contains(text(), "Россия")]')
-    AD_LOGO_UPLOAD = (By.XPATH, '//*[@data-testid="set-global-image"]')
-    AD_HEADER = (By.XPATH, '//*[@data-testid="заголовок, макс. 40 символов"]')
-    AD_SHORT_DESCRIPTION = (By.XPATH, '//*[@data-testid="описание, макс. 90 символов"]')
-    AD_MEDIATEKA = (By.XPATH, '//span[contains(text(), "Медиатека")]')
-    MEDIATEKA_FILE = (By.XPATH, '//div[starts-with(@class, "ImageItem")]')
-    CLOSE_BUTTON = (By.XPATH, '//button[@aria-label="Close"]')
 
-    # CommonError_closeButton__ - tUR1
+    @staticmethod
+    def _xpath(xpath_expression: str) -> tuple[By, str]:
+        return (By.XPATH, xpath_expression)
 
-    CLOSE_ERR_BUTTON = (By.XPATH, '//button[starts-with(@class, "CommonError_closeButton__-tUR1")]')
+    @staticmethod
+    def _by_text_contains(tag: str, text: str) -> tuple[By, str]:
+        return CampaignPageLocators._xpath(f'//{tag}[contains(text(), "{text}")]')
 
-    ADD_BUTTON = (By.XPATH, '//span[contains(text(), "Добавить")]')
-    AD_LOAD_MEDIAFILES = (By.XPATH, '//div[contains(@class, "Loading_loading")]')
-    FILE_INPUT = (By.XPATH, '//input[@type="file"]')
-    ADD_MEDIA_FILE_INPUT = (By.XPATH, '//label[starts-with(@class, "LocalFileSelector_file")]//input[@type="file"]')
-    LOADED_MEDIA_PREVIEW = (
-    By.XPATH, '//*[contains(@class, "MediaContainer_image") or contains(@class, "VideoContainer_video")]')
-    AD_LOGO_PREVIEW = (By.XPATH, '//img[@alt="media preview" and contains(@class, "AdMediaPreview_img")]')
-    ADD_MEDIA_AI = (By.XPATH, '//span[contains(text(), "Созданное нейросетью")]')
-    MEDIA_PLACEHOLDER = (By.XPATH, '//*[contains(@class, "MediaPlaceholder")]')
-    DESCRIPTION = (By.XPATH, '//*[@data-testid="Описание 2000 знаков"]')
-    ADD_MEDIA_AI_ELEMENT = (By.XPATH, '//div[contains(@class, "ImageItem_imageItem")]')
-    ADD_MEDIA_AI_BUTTON = (By.XPATH, '//span[contains(text(), "Добавить (")]')
-    PUBLISH_BUTTON = (By.XPATH, '//span[contains(text(), "Опубликовать")]')
-    GROUP_SELECTOR = (By.XPATH, '//div[starts-with(@class, "VkOwnerSelector_select")]')
-    ENTER_OTHER_GROUP = (By.XPATH, '//*[text()="Другое сообщество"]')
-    ADD_GROUP_BUTTON = (By.XPATH, '//*[text()="Добавить"]')
-    CONFIRM_CAMPAIGN = (By.XPATH, '//span[text()="Отправить"]')
-    SHOT_IN_VIDEO = (By.XPATH, '//span[text()="Ролик в видео"]')
+    @staticmethod
+    def _by_text_exact(tag: str, text: str) -> tuple[By, str]:
+        return CampaignPageLocators._xpath(f'//{tag}[text()="{text}"]')
 
-    SELECT_LOGO_BUTTON = (By.XPATH, '//span[contains(text(), "Выбрать логотип")]')
-    LOGO_FILE_INPUT_IN_MODAL = (By.XPATH, '//div[contains(@class, "MediaLibrary_container")]//input[@type="file"]')
+    @staticmethod
+    def _by_class_contains(tag: str, class_name: str) -> tuple[By, str]:
+        return CampaignPageLocators._xpath(f'//{tag}[contains(@class, "{class_name}")]')
 
-    LOADED_LOGO_PREVIEW = (By.XPATH, '//div[contains(@class, "UploadMediaButton_image")]//img')
+    @staticmethod
+    def _by_class_starts_with(tag: str, class_name_prefix: str) -> tuple[By, str]:
+        return CampaignPageLocators._xpath(f'//{tag}[starts-with(@class, "{class_name_prefix}")]')
 
-    ACTIONS_ICON = (By.XPATH, '//*[@data-testid="actions"]')
-    DELETE_BUTTON = (By.XPATH, '//*[contains(text(), "Удалить")]')
-    CAMPAIGNS_MENU_TAB = (By.XPATH, '//*[@id="dashboardV2.plans"]')
+    @staticmethod
+    def _by_attribute_exact(tag: str, attribute: str, value: str) -> tuple[By, str]:
+        return CampaignPageLocators._xpath(f'//{tag}[@{attribute}="{value}"]')
 
-    SEARCH_INPUT = (By.XPATH, '//*[@data-testid="filter-search-input"]')
-    FILTER_BUTTON = (By.XPATH, '//*[@data-testid="filter-button"]')
-    FILTERS_RESET_BUTTON = (By.XPATH, '//*[@data-testid="filters-reset-all-button"]')
-    FILTERS_APPLY_BUTTON = (By.XPATH, '//*[@data-testid="filters-apply-button"]')
+    @staticmethod
+    def _by_testid(testid: str, tag: str = '*') -> tuple[By, str]:
+        return CampaignPageLocators._xpath(f'//{tag}[@data-testid="{testid}"]')
 
-    TAGS_SELECTOR = (By.XPATH, '//*[@data-testid="tags-selector"]')
-    CREATE_TAG = (By.XPATH, '//*[@data-testid="create_tag"]')
-    FOLDER_NAME_INPUT = (By.XPATH, '//input[@value="Новая папка"]')
-    CLOSE_CREATE_FOLDER_POPUP = (By.XPATH, '//div[contains(@class, "TagAdPlanModal_actions")]//span[text()="Отмена"]')
-    DELETE_FOLDER_BUTTON = (By.XPATH, '//span[text()="Удалить папку"]')
-    CONFIRM_DELETE_FOLDER_BUTTON = (By.XPATH, '//div[contains(@class,"ModalConfirm_buttons")]//span[text()="Удалить"]')
+    ADD_MEDIA_AI_ELEMENT = _by_class_contains('div', 'ImageItem_imageItem')
+    ADD_MEDIA_AI_BUTTON = _by_text_contains('span', 'Добавить (')
+    PUBLISH_BUTTON = _by_text_contains('span', 'Опубликовать')
 
-    ADD_CAMPAIGNS_TO_FOLDER = (By.XPATH, '//span[text()="Добавить кампании в папку"]')
-    SAVE = (By.XPATH, '//span[text()="Сохранить"]')
+    DISMISS_BUTTON = _xpath('//div[@role="button" and @aria-label="Закрыть"]')
+    CREATE_CAMPAIGN_BUTTON = _by_testid('create-button')
+    EDITABLE_HEADER = _by_class_starts_with('div', 'EditableTitle')
 
-    EDIT_BUTTON = (By.XPATH, '//*[@data-testid="edit"]')
+    _EDITABLE_TITLE_BASE_XPATH_PART = '//div[starts-with(@class, "EditableTitle")]'
+    EDITABLE_CAMPAIGN_HEADER = _xpath(f'{_EDITABLE_TITLE_BASE_XPATH_PART}[.//*[contains(text(), "Кампания")]]')
+    EDITABLE_GROUP_HEADER = _xpath(f'{_EDITABLE_TITLE_BASE_XPATH_PART}[.//*[contains(text(), "Группа")]]')
+    EDITABLE_AD_HEADER = _xpath(f'{_EDITABLE_TITLE_BASE_XPATH_PART}[.//*[contains(text(), "Объявление")]]')
 
-    ADS_MENU_ITEM = (By.XPATH, '//*[@id="dashboardV2.ads"]')
-    EDIT_HEADER = (By.XPATH, '//*[text()="Редактирование"]')
 
-    def get_campaign_name_locator(self, name):
+    SITE_OPTION = _by_attribute_exact('div', 'data-id', 'site_conversions')
+    GROUP_OPTION = _by_attribute_exact('div', 'data-id', 'social')
+    ADVERTISED_SITE_FIELD = _by_attribute_exact('input', 'placeholder', 'Вставьте ссылку или выберите из списка')
+
+    BUDGET = _by_testid('targeting-not-set')
+    START_DATE = _by_testid('start-date')
+    END_DATE = _by_testid('end-date')
+
+    CONTINUE = _by_text_contains('span', 'Продолжить')
+    REGION = _by_text_contains('span', 'Россия')
+    AD_LOGO_UPLOAD = _by_testid('set-global-image')
+    AD_HEADER = _by_testid('заголовок, макс. 40 символов')
+    AD_SHORT_DESCRIPTION = _by_testid('описание, макс. 90 символов')
+    AD_MEDIATEKA = _by_text_contains('span', 'Медиатека')
+    MEDIATEKA_FILE = _by_class_starts_with('div', 'ImageItem')
+    CLOSE_BUTTON = _by_attribute_exact('button', 'aria-label', 'Close')
+
+    CLOSE_ERR_BUTTON = _by_class_starts_with('button', 'CommonError_closeButton__')
+
+    ADD_BUTTON = _by_text_contains('span', 'Добавить')
+    AD_LOAD_MEDIAFILES = _by_class_contains('div', 'Loading_loading')
+    FILE_INPUT = _by_attribute_exact('input', 'type', 'file')
+    ADD_MEDIA_FILE_INPUT = _xpath('//label[starts-with(@class, "LocalFileSelector_file")]//input[@type="file"]')
+
+    LOADED_MEDIA_PREVIEW = _xpath('//*[contains(@class, "MediaContainer_image") or contains(@class, "VideoContainer_video")]')
+    AD_LOGO_PREVIEW = _xpath('//img[@alt="media preview" and contains(@class, "AdMediaPreview_img")]')
+
+    ADD_MEDIA_AI = _by_text_contains('span', 'Созданное нейросетью')
+    MEDIA_PLACEHOLDER = _by_class_contains('*', 'MediaPlaceholder')
+    DESCRIPTION = _by_testid('Описание 2000 знаков')
+
+    GROUP_SELECTOR = _by_class_starts_with('div', 'VkOwnerSelector_select')
+    ENTER_OTHER_GROUP = _by_text_exact('*', 'Другое сообщество')
+    ADD_GROUP_BUTTON = _by_text_exact('*', 'Добавить')
+    CONFIRM_CAMPAIGN = _by_text_exact('span', 'Отправить')
+    SHOT_IN_VIDEO = _by_text_exact('span', 'Ролик в видео')
+
+    SELECT_LOGO_BUTTON = _by_text_contains('span', 'Выбрать логотип')
+    LOGO_FILE_INPUT_IN_MODAL = _xpath('//div[contains(@class, "MediaLibrary_container")]//input[@type="file"]')
+    LOADED_LOGO_PREVIEW = _xpath('//div[contains(@class, "UploadMediaButton_image")]//img')
+
+    ACTIONS_ICON = _by_testid('actions')
+    DELETE_BUTTON = _by_text_contains('*', 'Удалить')
+    CAMPAIGNS_MENU_TAB = _by_attribute_exact('*', 'id', 'dashboardV2.plans')
+
+    SEARCH_INPUT = _by_testid('filter-search-input')
+    FILTER_BUTTON = _by_testid('filter-button')
+    FILTERS_RESET_BUTTON = _by_testid('filters-reset-all-button')
+    FILTERS_APPLY_BUTTON = _by_testid('filters-apply-button')
+
+    TAGS_SELECTOR = _by_testid('tags-selector')
+    CREATE_TAG = _by_testid('create_tag')
+    FOLDER_NAME_INPUT = _by_attribute_exact('input', 'value', 'Новая папка')
+    CLOSE_CREATE_FOLDER_POPUP = _xpath('//div[contains(@class, "TagAdPlanModal_actions")]//span[text()="Отмена"]')
+    DELETE_FOLDER_BUTTON = _by_text_exact('span', 'Удалить папку')
+    CONFIRM_DELETE_FOLDER_BUTTON = _xpath('//div[contains(@class,"ModalConfirm_buttons")]//span[text()="Удалить"]')
+
+    ADD_CAMPAIGNS_TO_FOLDER = _by_text_exact('span', 'Добавить кампании в папку')
+    SAVE = _by_text_exact('span', 'Сохранить')
+
+    EDIT_BUTTON = _by_testid('edit')
+    ADS_MENU_ITEM = _by_attribute_exact('*', 'id', 'dashboardV2.ads')
+    EDIT_HEADER = _by_text_exact('*', 'Редактирование')
+
+
+    def get_campaign_name_locator(self, name: str) -> tuple[By, str]:
         return (By.XPATH, f'//div[starts-with(@class, "nameCellContent_content")]//button[text()="{name}"]')
 
-    def get_folder_name_locator(self, name):
+    def get_folder_name_locator(self, name: str) -> tuple[By, str]:
         return (By.XPATH, f'//div[starts-with(@data-testid, "tag") and text()="{name}"]')
 
-    def get_folder_edit_icon_locator(self, name):
-        name_loc = self.get_folder_name_locator(name=name)[1]
-        loc = name_loc + '/../../../../div[contains(@class, "vkuiSimpleCell__after")]'
+    def get_folder_edit_icon_locator(self, name: str) -> tuple[By, str]:
+        folder_name_part = f'div[starts-with(@data-testid, "tag") and text()="{name}"]'
+        cell_container_class = "vkuiSimpleCell"
+        actions_container_class = "vkuiSimpleCell__after"
+
+        loc = (f'//{folder_name_part}'
+               f'/ancestor::div[contains(@class, "{cell_container_class}")][1]'
+               f'//div[contains(@class, "{actions_container_class}")]//button[@aria-label="Редактировать"]')
         return (By.XPATH, loc)
 
-    def get_select_campaign_element(self, name):
-        return (By.XPATH, f'//span[contains(@class, "vkuiCheckbox__titleBefore") and text()="{name}"]')
+    def get_select_campaign_element(self, name: str) -> tuple[By, str]:
+        return (By.XPATH, f'//span[contains(@class, "vkuiCheckbox__titleBefore") and text()="{name}"]/ancestor::label[1]//input[@type="checkbox"]')
 
-    def get_ad_name_locator(self, name):
+    def get_ad_name_locator(self, name: str) -> tuple[By, str]:
         return (By.XPATH, f'//button[text()="{name}"]')
 
-    def get_editable_campaign_header(self, name):
-        return (By.XPATH, f'//div[starts-with(@class, "EditableTitle") and *[contains(text(), {name})]]')
+    def get_editable_campaign_header(self, name: str) -> tuple[By, str]:
+        return self._xpath(f'{self._EDITABLE_TITLE_BASE_XPATH_PART}[.//*[contains(text(), "{name}")]]')
 
-    def get_editable_ad_header(self, name):
-        return (By.XPATH,
-                f'//div[starts-with(@class, "EditableTitle") and *[contains(@class, "EditableTitle_title") and contains(text(), {name})]]')
+    def get_editable_ad_header(self, name: str) -> tuple[By, str]:
+        return self._xpath(
+                f'{self._EDITABLE_TITLE_BASE_XPATH_PART}[.//*[contains(@class, "EditableTitle_title") and contains(text(), "{name}")]]')

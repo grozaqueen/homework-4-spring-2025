@@ -18,6 +18,7 @@ class BaseCase:
         try:
             WebDriverWait(self.driver, timeout).until(EC.url_matches(url))
             return True
-        except:
+        except TimeoutException:
             raise PageNotOpenedException(
-                f'{url} did not open in {timeout} sec, current url {self.driver.current_url}')
+                f'{url} did not open in {timeout} sec. Current URL: {self.driver.current_url}'
+            )
