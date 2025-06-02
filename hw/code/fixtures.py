@@ -10,8 +10,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
 from campaigns_page import CampaignsPage
-
-logger = logging.getLogger(__name__)
+from audience_page import AudiencePage
+from login_page import LoginPage
+from leadform_page import LeadFormPage
 
 BASE_URL_FOR_AUTH = "https://ads.vk.com/"
 
@@ -19,8 +20,12 @@ BASE_URL_FOR_AUTH = "https://ads.vk.com/"
 @pytest.fixture(scope='function')
 def driver():
     service = Service(executable_path=ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service)
-    logger.info("Запуск браузера Chrome")
+
+    options = webdriver.ChromeOptions()
+
+    driver = webdriver.Chrome(service=service, options=options)
+
+    print("Запуск браузера")
 
     driver.get(BASE_URL_FOR_AUTH)
     logger.info(f"Навигация на {BASE_URL_FOR_AUTH} для установки cookie/localStorage")
@@ -42,7 +47,13 @@ def driver():
         logger.warning("Файл localstorage.json не найден.")
         LOCAL_STORAGE_DATA = {}
     except json.JSONDecodeError:
-        logger.error("Ошибка декодирования localstorage.json.")
+
+        print("Ошибка декодирования localstorage.json.")
+        print("Файл localstorage.json не найден.")
+        LOCAL_STORAGE_DATA = {}
+    except json.JSONDecodeError:
+        print("Ошибка декодирования localstorage.json.")
+
         LOCAL_STORAGE_DATA = {}
 
     if COOKIES_DATA:
@@ -117,6 +128,7 @@ def driver():
 
     logger.info("Обновление страницы для применения cookie/localStorage...")
     driver.refresh()
+
     driver.maximize_window()
     yield driver
     logger.info("Закрытие браузера")
@@ -127,9 +139,7 @@ def get_driver(browser_name, config=None):
     if browser_name == 'chrome':
         service = Service(executable_path=ChromeDriverManager().install())
         browser = webdriver.Chrome(service=service)
-    elif browser_name == 'firefox':
-        service = Service(executable_path=GeckoDriverManager().install())
-        browser = webdriver.Firefox(service=service)
+
     else:
         raise RuntimeError(f'Unsupported browser: "{browser_name}"')
     browser.maximize_window()
@@ -148,6 +158,12 @@ def all_drivers(config, request):
 
 
 @pytest.fixture
+
+def leadform_page(driver):
+
+    driver.get(LeadFormPage.url)
+    return LeadFormPage(driver=driver)
+
 def campaigns_page(driver):
     return CampaignsPage(driver=driver)
 
@@ -199,3 +215,4 @@ def base_page(driver):
 @pytest.fixture
 def main_page(driver):
     return MainPage(driver=driver)
+

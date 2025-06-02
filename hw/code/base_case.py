@@ -1,7 +1,5 @@
 import pytest
 from _pytest.fixtures import FixtureRequest
-from selenium.common import TimeoutException
-
 from base_page import PageNotOpenedException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait

@@ -4,7 +4,9 @@ from selenium.common import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
+
+from selenium.webdriver.support import expected_conditions as EC
+
 from os import path
 
 from base_locators import BasePageLocators
@@ -55,19 +57,20 @@ class BasePage(object):
         return WebDriverWait(self.driver, timeout=timeout)
 
     def find(self, locator, timeout=None) -> WebElement:
-        return self.wait(timeout).until(ec.presence_of_element_located(locator))
+        return self.wait(timeout).until(EC.presence_of_element_located(locator))
 
     def find_multiple(self, locator, timeout=None):
-        return self.wait(timeout).until(ec.visibility_of_all_elements_located(locator))
+        return self.wait(timeout).until(EC.visibility_of_all_elements_located(locator))
 
     @allure.step('Click')
     def click(self, locator, timeout=None) -> WebElement:
-        elem = self.wait(timeout).until(ec.element_to_be_clickable(locator))
+        elem = self.wait(timeout).until(EC.element_to_be_clickable(locator))
+
         elem.click()
         return elem
 
     def scroll_and_click(self, locator, timeout=None) -> WebElement:
-        elem = self.wait(timeout).until(ec.presence_of_element_located(locator))
+        elem = self.wait(timeout).until(EC.presence_of_element_located(locator))
         ActionChains(self.driver).move_to_element(elem).click(elem).perform()
         return elem
 
@@ -77,19 +80,21 @@ class BasePage(object):
         self.driver.switch_to.window(handles[1])
 
     def hover(self, locator, timeout=None):
-        elem = self.wait(timeout).until(ec.presence_of_element_located(locator))
+        elem = self.wait(timeout).until(EC.presence_of_element_located(locator))
+
         ActionChains(self.driver).move_to_element(elem).perform()
 
     def became_invisible(self, locator, timeout=None):
         try:
-            self.wait(timeout).until(ec.invisibility_of_element(locator))
+            self.wait(timeout).until(EC.invisibility_of_element(locator))
+
             return True
         except TimeoutException:
             return False
 
     def became_visible(self, locator, timeout=None):
         try:
-            self.wait(timeout).until(ec.visibility_of_element_located(locator))
+            self.wait(timeout).until(EC.visibility_of_element_located(locator))
             return True
         except TimeoutException:
             return False
@@ -104,7 +109,7 @@ class BasePage(object):
     def is_element_clickable(self, locator, timeout=5):
         try:
             WebDriverWait(self.driver, timeout=timeout).until(
-                ec.element_to_be_clickable(locator)
+                EC.element_to_be_clickable(locator)
             )
             return True
         except TimeoutException:
@@ -113,20 +118,11 @@ class BasePage(object):
     def send_keys_to_input(self, locator, keys, timeout=None, clear_first=True):
         if timeout is None:
             timeout = self.timeout
-
-        # Находим элемент. find() теперь должен ждать видимости.
-        # Можно также использовать element_to_be_clickable, если нужно, чтобы поле было активно.
-        # inp = self.wait(timeout).until(EC.element_to_be_clickable(locator))
-        inp = self.find(locator=locator, timeout=timeout)  # self.find уже ждет EC.visibility_of_element_located
-
-        # Опционально: можно добавить попытку JS клика для фокуса, если send_keys не срабатывает
-        # try:
-        #     self.driver.execute_script("arguments[0].focus();", inp)
-        # except Exception as e:
-        #     print(f"Could not focus element {locator} via JS: {e}")
+            
+        inp = self.find(locator=locator, timeout=timeout)
 
         if clear_first:
-            inp.clear()  # Очищаем поле перед вводом
+            inp.clear()
 
         inp.send_keys(keys)  # Отправляем текст
         print(f"Sent keys '{keys}' to element {locator}")
