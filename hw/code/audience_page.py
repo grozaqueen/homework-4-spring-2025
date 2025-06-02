@@ -16,7 +16,7 @@ class AudiencePage(BasePage):
         self.click(locator=self.locators.ADD_SOURCE, timeout=timeout)
 
     def enter_audience_name(self, name, timeout=DEFAULT_TIMEOUT):
-        self.send_keys_to_input(locator=self.locators.NAME_INPUT, keys=Keys.BACKSPACE*200+name+Keys.ENTER, timeout=timeout)
+        self.send_keys_to_input(locator=self.locators.NAME_INPUT, keys=name+Keys.ENTER, timeout=timeout)
 
     def click_user_list_option(self, timeout=DEFAULT_TIMEOUT):
         self.click(locator=self.locators.USER_LIST_OPTION, timeout=timeout)
@@ -31,7 +31,7 @@ class AudiencePage(BasePage):
         self.click(locator=self.locators.LOAD_NEW_OPTION, timeout=timeout)
 
     def enter_list_name(self, name, timeout=DEFAULT_TIMEOUT):
-        self.send_keys_to_input(locator=self.locators.LIST_NAME_INPUT, keys=Keys.BACKSPACE*200+name+Keys.ENTER, timeout=timeout)
+        self.send_keys_to_input(locator=self.locators.LIST_NAME_INPUT, keys=name+Keys.ENTER, timeout=timeout)
 
     def choose_unified_list(self, timeout=DEFAULT_TIMEOUT):
         self.click(locator=self.locators.LIST_TYPE_SELECT, timeout=timeout)
@@ -69,7 +69,7 @@ class AudiencePage(BasePage):
         assert self.became_invisible(locator=loc, timeout=timeout)
 
     def click_delete_and_confirm(self, name, timeout=DEFAULT_TIMEOUT):
-        loc = self.locators.get_edit_icon(name=name)
+        loc = self.locators.get_by_data_testid(name=name)
         self.hover(locator=loc, timeout=timeout)
         self.click(locator=loc, timeout=timeout)
         self.click(locator=self.locators.DELETE_BUTTON, timeout=timeout)
@@ -86,8 +86,8 @@ class AudiencePage(BasePage):
     def search_for_audience(self, name, timeout=DEFAULT_TIMEOUT):
         self.send_keys_to_input(locator=self.locators.SEARCH_INPUT, keys=name+Keys.ENTER, timeout=timeout)
 
-    def clear_search(self, timeout=DEFAULT_TIMEOUT):
-        self.send_keys_to_input(locator=self.locators.SEARCH_INPUT, keys=Keys.BACKSPACE*200, timeout=timeout)
+    def clear_search(self):
+        self.locators.SEARCH_INPUT.clear()
 
     def create_user_list(self, name, timeout=DEFAULT_TIMEOUT):
         self.click(locator=self.locators.USER_LIST_MENU_ITEM, timeout=timeout)
@@ -95,15 +95,15 @@ class AudiencePage(BasePage):
         self.enter_user_list_info(name=name, timeout=timeout)
 
     def assert_user_list_visible(self, name, timeout=DEFAULT_TIMEOUT):
-        assert self.became_visible(locator=self.locators.get_user_list_name(name=name), timeout=DEFAULT_TIMEOUT)
+        assert self.became_visible(locator=self.locators.get_user_list_name(name=name), timeout=timeout)
 
     def assert_user_list_not_visible(self, name, timeout=DEFAULT_TIMEOUT):
-        assert self.became_visible(locator=self.locators.get_user_list_name(name=name), timeout=DEFAULT_TIMEOUT)
+        assert self.became_visible(locator=self.locators.get_user_list_name(name=name), timeout=timeout)
 
     def assert_access_granted_visible(self, timeout=DEFAULT_TIMEOUT):
-        assert self.became_visible(locator=self.locators.ACCESS_GRANTED, timeout=DEFAULT_TIMEOUT)
+        assert self.became_visible(locator=self.locators.ACCESS_GRANTED, timeout=timeout)
 
-    def share_audience(self, name, timeout=DEFAULT_TIMEOUT):
+    def share_audience(self, timeout=DEFAULT_TIMEOUT):
         self.click(locator=self.locators.CHECKBOX_ALL, timeout=timeout)
         self.click(locator=self.locators.SHARE_BUTTON, timeout=DEFAULT_TIMEOUT)
         self.click(locator=self.locators.PUBLIC_KEY_OPTION, timeout=DEFAULT_TIMEOUT)

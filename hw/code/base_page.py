@@ -126,3 +126,4 @@ class BasePage(object):
 
         inp.send_keys(keys)  # Отправляем текст
         print(f"Sent keys '{keys}' to element {locator}")
+        return inp

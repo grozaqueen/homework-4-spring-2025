@@ -4,14 +4,18 @@ from base_locators import BasePageLocators
 
 
 class LeadFormPageLocators(BasePageLocators):
+
+    def select_by_placeholder(self, placeholder):
+        return By.XPATH, f'//input[@placeholder="{placeholder}"]'
+
+    def select_button_by_text(self, text):
+        return By.XPATH, f'//button[.//span[text()="{text}"]]'
+
+
     CREATE_LEAD_FORM_BUTTON = (By.XPATH, '//button[.//span[text()="Создать лид-форму"]]')
 
     MODAL_TITLE_NEW_LEAD_FORM = (By.XPATH, '//h2[text()="Новая лид-форма"]')
-    LEAD_FORM_INTERNAL_NAME_INPUT = (By.XPATH, '//input[@placeholder="Название лид-формы"]')
     UPLOAD_LOGO_BUTTON = (By.XPATH, '//*[@data-testid="set-global-image"]')
-    COMPANY_NAME_INPUT = (By.XPATH, '//input[@placeholder="Название компании"]')
-    FORM_TITLE_INPUT = (By.XPATH, '//input[@placeholder="Текст заголовка"]')
-    FORM_DESCRIPTION_INPUT = (By.XPATH, '//input[@placeholder="Введите описание"]')
     MODAL_CONTINUE_BUTTON = (By.XPATH, '//div[contains(@class, "ModalSidebarPage_footer")]//button[@data-testid="submit" and .//span[text()="Продолжить"]]')
     MODAL_CANCEL_BUTTON = (By.XPATH, '//div[contains(@class, "ModalSidebarPage_footer")]//button[@data-testid="cancel" and .//span[text()="Отмена"]]')
     COVER_IMAGE_FILE_INPUT = (By.XPATH, '//label[contains(@class, "LocalFileSelector_file")]//input[@type="file"]')
@@ -46,16 +50,6 @@ class LeadFormPageLocators(BasePageLocators):
     )
 
     LOADED_LEAD_FORM_LOGO_PREVIEW = (By.XPATH, '//div[contains(@class, "vkuiImageBase--loaded") and .//img and ancestor::div[contains(@class, "Preview_logoWrapper")]]//img')
-
-    NEXT_BUTTON = (
-        By.XPATH,
-        '//button[.//span[text()="Продолжить"]]'
-    )
-
-    ADD_QUESTION_BUTTON= (
-        By.XPATH,
-        '//button[.//span[text()="Добавить вопрос"]]'
-    )
 
     QUESTION_TEXT_INPUT = (
         By.XPATH,
