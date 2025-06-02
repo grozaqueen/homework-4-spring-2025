@@ -1,3 +1,4 @@
+from selenium.common import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from base_page import BasePage, DEFAULT_TIMEOUT
@@ -113,10 +114,18 @@ class CampaignsPage(BasePage):
 
     def get_campaign_name_element(self, name, timeout=DEFAULT_TIMEOUT):
         campaign_name_locator = self.locators.get_campaign_name_locator(name=name)
-        WebDriverWait(self.driver, timeout=timeout).until(
+
+        WebDriverWait(self.driver, timeout).until(
             EC.visibility_of_element_located(campaign_name_locator)
         )
         return self.find(locator=campaign_name_locator, timeout=timeout)
+
+    def is_campaign_visible(self, name, timeout=DEFAULT_TIMEOUT):
+        try:
+            element = self.get_campaign_name_element(name, timeout)
+            return element.is_displayed() and element.text == name
+        except TimeoutException:
+            return False
 
     def hover_actions_icon(self, timeout=DEFAULT_TIMEOUT):
         self.hover(self.locators.ACTIONS_ICON)

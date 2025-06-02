@@ -3,7 +3,9 @@ import time
 
 import pytest
 from selenium import webdriver
+from selenium.common import TimeoutException
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
@@ -168,19 +170,30 @@ class BasePage:
         self.driver = driver
 
     def find_element(self, locator, time=10):
-        # Dummy find_element
-        from selenium.webdriver.support.ui import WebDriverWait
         from selenium.webdriver.support import expected_conditions as EC
         return WebDriverWait(self.driver, time).until(EC.presence_of_element_located(locator))
 
     def is_opened(self, timeout=10):
-        started = time.time()
-        while time.time() - started < timeout:
-            if self.driver.current_url:  # Check if current_url is not None
-                if self.driver.current_url.rstrip('/') == getattr(self, 'url', '').rstrip('/'):
-                    return True
-            time.sleep(0.1)
-        raise TimeoutError(f"Page {getattr(self, 'url', '')} not opened. Current URL: {self.driver.current_url}")
+        expected_url = getattr(self, 'url', None)
+        if not expected_url:
+            print(f"Warning: Page {self.__class__.__name__} has no 'url' attribute. Cannot verify if opened by URL.")
+            return True
+
+        expected_url_stripped = expected_url.rstrip('/')
+
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                lambda d: d.current_url is not None and \
+                          d.current_url.rstrip('/') == expected_url_stripped
+            )
+            return True
+        except TimeoutException:
+            current_url = self.driver.current_url
+
+            raise TimeoutError(
+                f"Page with expected URL '{expected_url_stripped}' was not opened within {timeout} seconds. "
+                f"Current URL: '{current_url}'"
+            )
 
 
 class MainPage(BasePage):
